@@ -1,0 +1,3 @@
+# This is a gitignore file to get rid of stuff we done need
+*.m~          # This is an autosave character for MATLAB in linux and Mac
+*.asv         # This is the windows autosave for matlab
