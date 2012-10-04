@@ -1,4 +1,4 @@
-function [Ne,Xi,Yi,Zi,utime,T1,T2,bco] = interpAMISRnocal(varargin)
+function [Ne,Xi,Yi,Zi,bco,utime,T1,T2] = interpAMISRnocal(varargin)
 %
 %interpRISRnocal  Linear interpolation of non-calibrated AMISR data onto a cartesian grid
 %
