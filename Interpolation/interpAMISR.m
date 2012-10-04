@@ -1,4 +1,4 @@
-function [Ne,Xi,Yi,Zi,T1,T2,utime,bco] = interpAMISR(varargin)
+function [Ne,Xi,Yi,Zi,utime,bco,T1,T2] = interpAMISR(varargin)
 %
 %interpAMISR  Linear interpolation of calibrated AMISR data onto a
 %cartesian grid
@@ -19,7 +19,7 @@ function [Ne,Xi,Yi,Zi,T1,T2,utime,bco] = interpAMISR(varargin)
 %                   'E:/20120122.001_lp_2min-Ne.h5';
 %
 %   OUTPUT:
-% [Ne,Xi,Yi,Zi,T1,T2,utime,bco]
+% [Ne,Xi,Yi,Zi,utime,bco,T1,T2]
 %
 %   DESCRIPTION:
 %Function that interpolates calibrated AMISR data onto 3D Cartesian grid. 
@@ -28,7 +28,7 @@ function [Ne,Xi,Yi,Zi,T1,T2,utime,bco] = interpAMISR(varargin)
 %   StartTime = datenum(2009,12,11,22,13,00);
 %   EndTime = datenum(2009,12,11,22,14,00);
 %   file_name = '20091211.001_lp_1min-cal.h5'
-%   [Ne,Xi,Yi,Zi,T1,T2,NUMPOINTS,utime,bco] =
+%   [Ne,Xi,Yi,Zi,utime,bco,T1,T2] =
 %       interpAMISR(StartTime,EndTime,file_name);
 %
 %%
