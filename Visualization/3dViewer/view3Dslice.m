@@ -263,6 +263,8 @@ imagesc(handles.xsca,handles.ysca,squeeze(handles.matrix(:,:,handles.zslicenum))
 if useglobalmm
     caxis([handles.cmin,handles.cmax]);
 end
+set(gca,'Ydir','Normal');
+
 xlabel(handles.axes_xy_slice,handles.xname);
 ylabel(handles.axes_xy_slice,handles.yname);
 title(handles.axes_xy_slice,sprintf('XY Image (Z = %d, %2.2f)',...
@@ -273,6 +275,8 @@ imagesc(handles.xsca,handles.zsca,squeeze(handles.matrix(:,handles.yslicenum,:))
 if useglobalmm
     caxis([handles.cmin,handles.cmax]);
 end
+set(gca,'Ydir','Normal');
+
 xlabel(handles.axes_xz_slice,handles.xname);
 ylabel(handles.axes_xz_slice,handles.zname);
 title(handles.axes_xz_slice,sprintf('XZ Image (Y = %d, %2.2f)',...
@@ -283,6 +287,7 @@ imagesc(handles.ysca,handles.zsca,squeeze(handles.matrix(handles.xslicenum,:,:))
 if useglobalmm
     caxis([handles.cmin,handles.cmax]);
 end
+set(gca,'Ydir','Normal');
 xlabel(handles.axes_yz_slice,handles.yname);
 ylabel(handles.axes_yz_slice,handles.zname);
 title(handles.axes_yz_slice,sprintf('YZ Image (X = %d, %2.2f)',...
@@ -464,6 +469,7 @@ imagesc(handles.xsca,handles.ysca,squeeze(handles.matrix(:,:,handles.zslicenum))
 if useglobalmm
     caxis([handles.cmin,handles.cmax]);
 end
+set(gca,'Ydir','Normal');
 xlabel(handles.xname);
 ylabel(handles.yname);
 title(sprintf('XY Image (Z = %d, %2.2f)',...
@@ -479,6 +485,7 @@ imagesc(handles.xsca,handles.zsca,squeeze(handles.matrix(:,handles.yslicenum,:))
 if useglobalmm
     caxis([handles.cmin,handles.cmax]);
 end
+set(gca,'Ydir','Normal');
 xlabel(handles.xname);
 ylabel(handles.zname);
 title(sprintf('XZ Image (Y = %d, %2.2f)',...
@@ -496,6 +503,8 @@ imagesc(handles.ysca,handles.zsca,squeeze(handles.matrix(handles.xslicenum,:,:))
 if useglobalmm
     caxis([handles.cmin,handles.cmax]);
 end
+set(gca,'Ydir','Normal');
+
 xlabel(handles.yname);
 ylabel(handles.zname);
 title(sprintf('YZ Image (X = %d, %2.2f)',...

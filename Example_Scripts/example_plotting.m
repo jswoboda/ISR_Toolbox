@@ -34,4 +34,5 @@ data_name = {'Ne Slice 1','Ne Slice 2'};
 
 Ne_cell = {Ne1,Ne2};
 
-view3Dslice(Ne_cell,xsca,ysca,zsca,xname,yname,zname,data_name);
+%view3Dslice(Ne_cell,xsca,ysca,zsca,xname,yname,zname,data_name);
+%sliceomatic(Ne1,xsca,ysca,zsca)

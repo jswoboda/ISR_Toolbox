@@ -1,6 +1,7 @@
 function setUpPath(varargin)
 % setUpPath.m
 % by John Swoboda
+% swoboj@bu.edu
 % This function will set up the path for the ISR toolbox and make the path
 % selection perminent if the user so desires.  
 % Example use
@@ -83,5 +84,3 @@ if strcmpi(setup_type,'permanent')
         disp('Folder does not exist, run this function again with a folder that exists');
     end
 end
-
-    end
