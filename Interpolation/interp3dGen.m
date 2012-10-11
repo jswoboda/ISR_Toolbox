@@ -4,7 +4,7 @@ function [F_out,Xi,Yi,Zi] = interp3dGen(F_in,az,el,Altitude,NUMPOINTS,DELTALT)
 % Examples
 % [F_out,Xi,Yi,Zi] = interp3dGen(F_in,az,el,Altitude);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-% Description: This is a generalized transfroms from sperical coordinates 
+% Description: This is a generalized transfroms from spherical coordinates 
 %(range and beam space) to Cartesian coordinates (x,y,z).  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Inputs
@@ -28,7 +28,6 @@ function [F_out,Xi,Yi,Zi] = interp3dGen(F_in,az,el,Altitude,NUMPOINTS,DELTALT)
 % direction.
 %% Get basic info
 [N,M,T] = size(F_in);
-
 
 %% convert to Cartesian coordinates (flat Earth model)
 
