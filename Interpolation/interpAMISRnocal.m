@@ -58,21 +58,21 @@ if nargin==2
     StartTime=varargin{1};
     EndTime=varargin{2};
     display('no specified datafile, will use default')
-  file_name = input('Please specify the data file: \n (e.g. 20120122.001_lp_2min-Ne.h5)\n','s');
+    file_name = input('Please specify the data file: \n (e.g. 20120122.001_lp_2min-Ne.h5)\n','s');
 
 end
 
 %If only the data file is specified
 if nargin>1
-if ischar(varargin{1})
-    start = input('Please specify StartTime, on the format: year month day hour minute second \n (e.g. 2012 01 24 12 30 00)\n','s');
-    start = str2num(start);
-    StartTime = datenum(start(1),start(2),start(3),start(4),start(5),start(6));
-    endtime = input('Please specify EndTime, on the format: year month day hour minute second \n (e.g. 2012 01 24 12 32 00)\n','s');
-    endtime = str2num(endtime);
-    EndTime = datenum(endtime(1),endtime(2),endtime(3),endtime(4),endtime(5),endtime(6));   
-  file_name = varargin{1};
-end
+    if ischar(varargin{1})
+        start = input('Please specify StartTime, on the format: year month day hour minute second \n (e.g. 2012 01 24 12 30 00)\n','s');
+        start = str2num(start);
+        StartTime = datenum(start(1),start(2),start(3),start(4),start(5),start(6));
+        endtime = input('Please specify EndTime, on the format: year month day hour minute second \n (e.g. 2012 01 24 12 32 00)\n','s');
+        endtime = str2num(endtime);
+        EndTime = datenum(endtime(1),endtime(2),endtime(3),endtime(4),endtime(5),endtime(6));   
+      file_name = varargin{1};
+    end
 end
 %
 %
@@ -99,8 +99,8 @@ N_e = hdf5read(file_name,'/NeFromPower/Ne_NoTr');
 utime = hdf5read(file_name,'/Time/UnixTime');
 bco   = hdf5read(file_name,'BeamCodes');
 
-  %Making all NaNs 0
-  N_e(isnan(N_e))=1;
+%Making all NaNs 0
+N_e(isnan(N_e))=1;
 
 l=size(utime);
 mtime = zeros(l(1),l(2));
@@ -108,9 +108,9 @@ mtime = zeros(l(1),l(2));
 %%
 %Converting the time from unix time to matlab time
 for i1 = 1:l(1),
-for i2 = 1:l(2),
-mtime(i1,i2) = datenum([1970 1 1 0 0 double(utime(i1,i2))]); 
-end
+    for i2 = 1:l(2),
+        mtime(i1,i2) = datenum([1970 1 1 0 0 double(utime(i1,i2))]); 
+    end
 end
 
 %% Azimuth and elevation in degrees

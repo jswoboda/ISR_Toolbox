@@ -1,43 +1,49 @@
 function amisr_beams(varargin)
-%Function that plots the beam grid in polar coordinates. 
-%By adding 'numbers' as input argument, the beams are numbered.
-%
-%   SYNTAX:
-%           amisr_beams(datafile)
-%           amisr_beams(datafile,'numbers')
-%  
-%   INPUT:
-%     datafile   - h5 file with data, e.g.  
-%                   'E:/20120122.001_lp_2min-Ne.h5'
-%   OUTPUT:
-%     Plot of beam grid 
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-if nargin < 1 
-   fprintf('Please give a data file as input argument\n')
-   fprintf('e.g. amisr_beams(''20120122.001_lp_2min-Ne.h5'')\n')
-   return
+% amisr_beams.m
+% amisr_beams(filename))
+% amisr_beams(az,el)
+% Function that plots the beam grid in polar coordinates.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Inputs
+% filename - A string that holds the h5 filename.
+% az - The azimuthal coordinates of the beams in degrees.
+% el - The elevation of the beams in degrees
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Outputs
+% A plot of the beam positions.  The handle will not be returned as an
+% output.  Do a gcf after the function is run if you want the handle.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Input
+if nargin == 1
+    file_name=varargin{1};
+    h5file_info = h5info(file_name);
+   
+    str_data1 = {h5file_info.Datasets(:).Name};
+    str_data2 = {h5file_info.Groups(:).Name};
+     % for poker flat set up
+    if any(strcmp('BeamCodes',str_data1))
+        bco   = hdf5read(file_name,'BeamCodes');
+        az = bco(2,:)*pi/180;  
+        el = bco(3,:); 
+     % for madrigal data
+    else any(strcmp('Data',str_data2));
+        all_data = h5read(file_name,'/Data/Table Layout');
+        [~,ids,~] = unique(all_data.beamid);
+        az = all_data.azm(ids) *pi/180;
+        el = all_data.elm(ids);
+    end
+elseif nargin ==2
+    az = varargin{1}*pi/180;
+    el = varargin{2};
 end
 
-if strcmp(varargin{1},'numbers')
-     fprintf('Please give a data file as first input argument\n')
-     return
-end
-file_name=varargin{1};
-    
-%% Load radar file.
-%%Reading the data from the h5 file
+az = az*pi/180;
 
-bco   = hdf5read(file_name,'BeamCodes');
-
-%%
 %% Azimuth and elevation in degrees
-az = bco(2,:)*pi/180;  
-el = bco(3,:); 
+
 [x,y] = pol2cart(az,el);
 
-%%
+%% Plotting
 
 figure
 clf
