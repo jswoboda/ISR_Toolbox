@@ -257,9 +257,14 @@ colorbar('peer',h_axes);
 %% -- update2Dview
 function update2Dview(handles)
 useglobalmm = get(handles.check_globalmaxmin,'Value');
+min_all = min(handles.matrix(:));
+max_all = max(handles.matrix(:));
+global_lims = [min_all,max_all];
+
 % plot xy
 axes(handles.axes_xy_slice);
-imagesc(handles.xsca,handles.ysca,squeeze(handles.matrix(:,:,handles.zslicenum))');
+imagesc(handles.xsca,handles.ysca,...
+    squeeze(handles.matrix(:,:,handles.zslicenum))',global_lims);
 if useglobalmm
     caxis([handles.cmin,handles.cmax]);
 end
@@ -271,7 +276,8 @@ title(handles.axes_xy_slice,sprintf('XY Image (Z = %d, %2.2f)',...
     handles.zslicenum,handles.zsca(handles.zslicenum)));
 %plot xz
 axes(handles.axes_xz_slice);
-imagesc(handles.xsca,handles.zsca,squeeze(handles.matrix(:,handles.yslicenum,:))');
+imagesc(handles.xsca,handles.zsca,...
+    squeeze(handles.matrix(:,handles.yslicenum,:))',global_lims);
 if useglobalmm
     caxis([handles.cmin,handles.cmax]);
 end
@@ -283,7 +289,8 @@ title(handles.axes_xz_slice,sprintf('XZ Image (Y = %d, %2.2f)',...
     handles.yslicenum,handles.ysca(handles.yslicenum)));
 % plot yz
 axes(handles.axes_yz_slice);
-imagesc(handles.ysca,handles.zsca,squeeze(handles.matrix(handles.xslicenum,:,:))');
+imagesc(handles.ysca,handles.zsca,...
+    squeeze(handles.matrix(handles.xslicenum,:,:))',global_lims);
 if useglobalmm
     caxis([handles.cmin,handles.cmax]);
 end

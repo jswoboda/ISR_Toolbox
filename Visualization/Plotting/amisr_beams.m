@@ -17,23 +17,30 @@ function amisr_beams(varargin)
 if nargin == 1
     file_name=varargin{1};
     h5file_info = h5info(file_name);
-   
-    str_data1 = {h5file_info.Datasets(:).Name};
-    str_data2 = {h5file_info.Groups(:).Name};
+    if ~isempty(h5file_info.Datasets)  
+        str_data1 = {h5file_info.Datasets(:).Name};
+    else
+        str_data1 = {[]};
+    end
+    if ~isempty(h5file_info.Groups)
+        str_data2 = {h5file_info.Groups(:).Name};
+    else
+        str_data2 = {[]};
+    end
      % for poker flat set up
     if any(strcmp('BeamCodes',str_data1))
         bco   = hdf5read(file_name,'BeamCodes');
-        az = bco(2,:)*pi/180;  
+        az = bco(2,:);  
         el = bco(3,:); 
      % for madrigal data
     else any(strcmp('Data',str_data2));
         all_data = h5read(file_name,'/Data/Table Layout');
         [~,ids,~] = unique(all_data.beamid);
-        az = all_data.azm(ids) *pi/180;
+        az = all_data.azm(ids) ;
         el = all_data.elm(ids);
     end
 elseif nargin ==2
-    az = varargin{1}*pi/180;
+    az = varargin{1};
     el = varargin{2};
 end
 
