@@ -1,13 +1,8 @@
-function [Xi,Yi,Zi,varargout] = interp3dFlat(az,el,Range,time_points,...
-    NUMPOINTS,DELTALT,varargin)
-% interp3dFlat.m
-% [Xi,Yi,Zi,Ne_3d,Ti_3d...] = interp3dFlat(az,el,Range,time_points,...
-%    NUMPOINTS,Ne,Ti...)
-% This function will interpolate the ISR data to a local ENU coordinate 
-% system assuming all of the data is in Nx1 arrays.  It it will interpolate
-% all of the different parameters at once.  To get more parameters
-% interpolated just keep adding Nx1 arrays of data as arguments along with 
-% ouptut arugments
+function varargout = interp3dFlatLatLong(az,el,Range,time_points,lla,posmesh,varargin)
+% interp3dFlatLatLong.m
+% [Ne_3d,Ti_3d...] = interp3dFlatLatLong(az,el,Range,time_points,lla,posmesh,Ne,Ti...)
+% This function will interpolate ISR data a latitude and longitude
+% grid specified by the user.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Inputs
 % az - An Nx1 array that contains the az positions of the data.
@@ -17,14 +12,14 @@ function [Xi,Yi,Zi,varargout] = interp3dFlat(az,el,Range,time_points,...
 % relative to the other measurements. (note no interolation is done in the
 % time dimension this is purley needed to determine what time instance the
 % data should be in.
-% NUMPOINTS - The number of points in the east and north directions.
-% DELTALT - The altidue spacing it is assumed it will be in meters
+% lla - a 3x1 array holding the lat long and altitude of the radar system.
+% Posmesh - The lat long and altitude points the dat will be interpolated
+% over.
 % Ne, Ti - Nx1 arrays of measurments at specific range az and el points.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Outputs
-% Xi,Yi,Zi, - The meshgrid outputs that the data is interpolated over.
 % Ne_3d,Ti_3d - 3-d matricies that hold the data.
-%% Pull out unique Determine the unique time points
+%% Pull out unique values
 
 [u_time,~,ic_time] = unique(time_points);
 keep_ic = ic_time==1;
@@ -32,7 +27,7 @@ az1 = az(keep_ic);
 el1 = el(keep_ic);
 Range1 = Range(keep_ic);
 
-%% Convert to ENU coordinates
+%% Convert spherical data coordinates to ENU coordinates
 
 el2 = el1*pi/180;
 az2 = az1*pi/180;
@@ -48,24 +43,21 @@ rr=zr./kz;
 xr = rr.*kx;
 yr = rr.*ky;
 
-%% Interpolate spherical ("scatter") data in Cartesian coordinates
+% translate to WGS
+ENU = [xr(:), yr(:), zr(:)]; % Original positions
+ENU=double(ENU);
+ECEF_COORDS = enu2ecef(ENU,lla);
+positions_latfirst = ecef2wgs(ECEF_COORDS)';
+positions = [positions_latfirst(:,2),positions_latfirst(:,1),positions_latfirst(:,3)];
+%% Interpolate spherical ("scatter") data into Lat Lon and alt coordinates
 
-% Create a new 3D grid for the interpolated data
-[Xi,Yi,Zi] = meshgrid(linspace(min(xr),max(xr),NUMPOINTS),...
-                      linspace(min(yr),max(yr),NUMPOINTS),...
-                      min(zr):DELTALT:max(zr));
-Xi=double(Xi);
-Yi=double(Yi);
-Zi=double(Zi);
 
-positions = [xr(:), yr(:), zr(:)]; % Original positions
 positions=double(positions);
-posmesh   = [Xi(:), Yi(:), Zi(:)]; % New positions
 T = length(u_time);
 for iout = 1:nargin-6
     fprintf('Data set %d of %d\n',iout,nargin-6);
     F_in = varargin{iout};
-    F_out = zeros( [size(Xi), T] );
+    F_out = zeros( [size(posmesh,1), T] );
     for t = 1:T
         
         fprintf('\tInterpolating time step %d (of %d)... ',t,T);
@@ -73,21 +65,14 @@ for iout = 1:nargin-6
         % Grab the current densities.
         values = double(F_in(keep));
 
-
-        % ... and interpolate onto the new grid.
-
         Ni = griddatan(positions,values,posmesh,'linear'); 
         
     %     %Making all NaNs 0
         Ni(isnan(Ni))=0;
-
-
-        % Reshape Ni to go with Xi, Yi, & Zi.
-        Nireshaped = reshape(Ni, size(Xi));
-    
+        
         % "Deposit" Ni into Ne.
 
-        F_out(:,:,:,t) = Nireshaped; % 
+        F_out(:,t) = Ni; % 
         fprintf('linear interpolation done\n ')  
  
     end

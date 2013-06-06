@@ -43,4 +43,8 @@ end
 %% Perfom Calculation
 ECEF0 = wgs2ecef(LatLongHeight);
 LatLong = LatLongHeight(1:2,:);
+% correct for a single point
+if size(LatLongHeight,2)==1
+    ECEF0=repmat(ECEF0,1,size(ENU,2));
+end
 ECEF = enu2ecef4vec(ENU,LatLong)+ECEF0;
