@@ -1,8 +1,8 @@
-function varargout = interp3dFlatLatLong(az,el,Range,time_points,lla,posmesh,varargin)
-% interp3dFlatLatLong.m
-% [Ne_3d,Ti_3d...] = interp3dFlatLatLong(az,el,Range,time_points,lla,posmesh,Ne,Ti...)
-% This function will interpolate ISR data a latitude and longitude
-% grid specified by the user.
+function varargout = interp3dFlatENU(az,el,Range,time_points,posmesh,varargin)
+% interp3dFlatENU.m
+% [Ne_3d,Ti_3d...] = interp3dFlatLatLong(az,el,Range,time_points,posmesh,Ne,Ti...)
+% This function will interpolate ISR data on to a local cartisian grid or
+% Enu with center reference point.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Inputs
 % az - An Nx1 array that contains the az positions of the data.
@@ -12,9 +12,7 @@ function varargout = interp3dFlatLatLong(az,el,Range,time_points,lla,posmesh,var
 % relative to the other measurements. (note no interolation is done in the
 % time dimension this is purley needed to determine what time instance the
 % data should be in.
-% lla - a 3x1 array holding the lat long and altitude of the radar system.
-% Posmesh - The lat long and altitude points the dat will be interpolated
-% over.
+% Posmesh - The X, Y, Z grid that the data will be interpolated over.
 % Ne, Ti - Nx1 arrays of measurments at specific range az and el points.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Outputs
@@ -45,16 +43,22 @@ yr = rr.*ky;
 
 % translate to WGS
 ENU = [xr(:), yr(:), zr(:)]; % Original positions
-ENU=double(ENU);
-ECEF_COORDS = enu2ecef(ENU,lla);
-positions_latfirst = ecef2wgs(ECEF_COORDS)';
-positions = [positions_latfirst(:,2),positions_latfirst(:,1),positions_latfirst(:,3)];
-%% Interpolate spherical ("scatter") data into Lat Lon and alt coordinates
+positions=double(ENU);
 
+%% Reduce the pos mesh
+
+x_bounds = [min(xr(:)),max(xr(:))];
+y_bounds = [min(yr(:)),max(yr(:))];
+keep1 = posmesh(:,1)>=x_bounds(1)& posmesh(:,1)<=x_bounds(2);
+keep2 = posmesh(:,2)>=y_bounds(1)& posmesh(:,2)<=y_bounds(2);
+keep_overall = keep1&keep2;
+posmesh_red = posmesh(keep_overall,:);
+
+%% Interpolate spherical ("scatter") data into Lat Lon and alt coordinates
 
 positions=double(positions);
 T = length(u_time);
-for iout = 1:nargin-6
+for iout = 1:nargin-5
     fprintf('Data set %d of %d\n',iout,nargin-6);
     F_in = varargin{iout};
     F_out = zeros( [size(posmesh,1), T] );
@@ -64,15 +68,18 @@ for iout = 1:nargin-6
         keep = ic_time ==t;
         % Grab the current densities.
         values = double(F_in(keep));
-
-        Ni = griddatan(positions,values,posmesh,'linear'); 
-        
+        % Do interpolation but turn off warnings because it goes on
+        % forever.
+        orig_state = warning('query','all');
+        warning('off','all');
+        Ni = griddatan(positions,values,posmesh_red,'linear'); 
+        warning(orig_state);
     %     %Making all NaNs 0
         Ni(isnan(Ni))=0;
         
         % "Deposit" Ni into Ne.
 
-        F_out(:,t) = Ni; % 
+        F_out(keep_overall,t) = Ni; % 
         fprintf('linear interpolation done\n ')  
  
     end
