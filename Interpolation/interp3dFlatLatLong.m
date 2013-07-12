@@ -54,8 +54,9 @@ positions = [positions_latfirst(:,2),positions_latfirst(:,1),positions_latfirst(
 
 positions=double(positions);
 T = length(u_time);
-for iout = 1:nargin-6
-    fprintf('Data set %d of %d\n',iout,nargin-6);
+n_data = nargin-6;
+for iout = 1:n_data
+    fprintf('Data set %d of %d\n',iout,n_data);
     F_in = varargin{iout};
     F_out = zeros( [size(posmesh,1), T] );
     for t = 1:T

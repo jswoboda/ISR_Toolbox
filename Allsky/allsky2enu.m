@@ -1,4 +1,4 @@
-function [X_out,Y_out,d_image] = allsky2enu(all_sky,az,el,rng,im_sz)
+function [X_out,Y_out,d_image] = allsky2enu(all_sky,az,el,alt,im_sz)
 % allsky2enu.m
 % [X_out,Y_out,d_image] = allsky2enu(all_sky,az,el,rng,im_sz)
 % This function will take allsky data and from either a FITS file or memory
@@ -12,7 +12,7 @@ function [X_out,Y_out,d_image] = allsky2enu(all_sky,az,el,rng,im_sz)
 % holds the az locations.
 % el- This can either be an NxM image or the name of a FITS file that
 % holds the el locations
-% rng - A scalar that holds determines where the image will be projected to
+% alt - A scalar that holds determines where the image will be projected to
 % in meters.
 % im_sz = The final size of the image in the lat/long space [N_lat, N_lon].
 % if it a scalar N_lat = N_long = im_sz.
@@ -67,12 +67,12 @@ el_if=fliplr(el_i);
 
 %% Translate to new coordinate system
 % Take the locations of the data and place them in a new coordinate system.
-rng_mat = rng*ones(size(az_i));
+alt_mat = alt*ones(size(az_i));
 
 % Get the data in east north up
-x_data = rng_mat.*sind(az_i).*cotd(el_i);
-y_data = rng_mat.*cosd(az_i).*cotd(el_i);
-z_data = rng_mat;
+x_data = alt_mat.*sind(az_i).*cotd(el_i);
+y_data = alt_mat.*cosd(az_i).*cotd(el_i);
+z_data = alt_mat;
 
 xl = x_data(:);
 yl = y_data(:);

@@ -62,8 +62,9 @@ positions = [xr(:), yr(:), zr(:)]; % Original positions
 positions=double(positions);
 posmesh   = [Xi(:), Yi(:), Zi(:)]; % New positions
 T = length(u_time);
-for iout = 1:nargin-6
-    fprintf('Data set %d of %d\n',iout,nargin-6);
+n_data = nargin-6;
+for iout = 1:n_data
+    fprintf('Data set %d of %d\n',iout,n_data);
     F_in = varargin{iout};
     F_out = zeros( [size(Xi), T] );
     for t = 1:T

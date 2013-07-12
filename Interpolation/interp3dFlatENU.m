@@ -36,11 +36,15 @@ ky = cos(az2) .* cos(el2);
 kz = sin(el2);
 
 % radar points in Cartesian coordinates
-zr = Range1;
-rr=zr./kz;
-xr = rr.*kx;
-yr = rr.*ky;
+% zr = Range1;
+% rr = zr./kz;
+% xr = rr.*kx;
+% yr = rr.*ky;
 
+
+xr = Range1.*kx;
+yr = Range1.*ky;
+zr = Range1.*kz;
 % translate to WGS
 ENU = [xr(:), yr(:), zr(:)]; % Original positions
 positions=double(ENU);
@@ -58,8 +62,9 @@ posmesh_red = posmesh(keep_overall,:);
 
 positions=double(positions);
 T = length(u_time);
-for iout = 1:nargin-5
-    fprintf('Data set %d of %d\n',iout,nargin-6);
+n_data = nargin-5;
+for iout = 1:n_data
+    fprintf('Data set %d of %d\n',iout,n_data);
     F_in = varargin{iout};
     F_out = zeros( [size(posmesh,1), T] );
     for t = 1:T
@@ -75,7 +80,7 @@ for iout = 1:nargin-5
         Ni = griddatan(positions,values,posmesh_red,'linear'); 
         warning(orig_state);
     %     %Making all NaNs 0
-        Ni(isnan(Ni))=0;
+%         Ni(isnan(Ni))=0;
         
         % "Deposit" Ni into Ne.
 
