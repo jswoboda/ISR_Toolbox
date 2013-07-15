@@ -1,5 +1,5 @@
 function varargout = interpMadrigal(mad_input,meshin,coord,origin,varargin)
-% interp3dFlatENU.m
+% interpMadrigal.m
 % [Ne_3d,Ti_3d...] = interpMadrigal(mad_data_input,posmesh,Ne,Ti...)
 % This function will interpolate ISR data on to ENU, wgs or ecef.  It
 % is using a natural neighbor interpolation.  If interolated to wgs,
@@ -34,6 +34,31 @@ function varargout = interpMadrigal(mad_input,meshin,coord,origin,varargin)
 % Ne_3d,Ti_3d - 3-d matricies that hold the data.
 % Xi,Yi,Zi  - The mesh grid that the data was interpolated over.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Break up varargin
+if mod(length(varargin),2)
+    error('Incorrect number of arguments');
+end
+
+names_check = false;
+time_check = false;
+for k = 1:length(varargin)/2
+    label = varargin{2*k-1};
+    value = varargin{2*k};
+    
+    if strcmpi(label,'names')
+        names_list = value;
+        names_check = true;
+    elseif strcmpi(label,'timelimits');
+        time_limits = [datestr2unix(value{1}),datestr2unix(value{2})];
+        time_check = true;
+    end
+end
+
+if ~names_check
+    error('No data specified');
+end       
+
 %% Deal with the structs
 
 if isa(mad_input,'struct');
@@ -45,18 +70,23 @@ end
 
 All_Data = struct_trim(All_Data,~isnan(All_Data.range));
 
-% check if they are fields inthe struct
-TF = isfield(All_Data,varargin);
+% check if they are fields in the struct
+TF = isfield(All_Data,names_list);
 
 if ~any(TF)
     error('All field names are wrong');
 end
 
-data_names = varargin(TF);
+data_names = names_list(TF);
 not_here = varargin(~TF);
 
 disp(['Missing inputs: ',sprintf('%s ', not_here{:})])
 n_data = sum(TF);
+%% do time adjustment
+if time_check
+    keep_times = All_Data.ut1_unix>=time_limits(1)&All_Data.ut2_unix<time_limits(2);
+    All_Data = struct_trim(All_Data,keep_times);
+end
 
 %% Pull out unique values
 time_points = All_Data.ut1_unix;
@@ -115,7 +145,7 @@ if size(meshin,1)== 1
     [Xi,Yi,Zi] = meshgrid(x_vec,y_vec,z_vec);
     posmesh = [Xi(:),Yi(:),Zi(:)];
     xtra_out = 3;
-    keep_overall = true(size(posmesh));
+    keep_overall = true(size(posmesh,1),1);
     posmesh_red = posmesh;
     varargout = cell(1,xtra_out+n_data);
     varargout(1:3) = {Xi,Yi,Zi};
@@ -153,7 +183,7 @@ for iout = 1:n_data
         Ni = Ni_TSI(posmesh_red);
         warning(orig_state);
 
-        F_out(keep_overall,t) = Ni; % 
+        F_out(keep_overall,t) = Ni(keep_overall); % 
         fprintf('Interpolation done\n ')  
  
     end
