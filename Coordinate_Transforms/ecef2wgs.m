@@ -1,7 +1,7 @@
 function WGS_COORDS = ecef2wgs(ECEF_COORDS)
 % ecef2wgs.m
 % ECEF_COORDS = wgs2ecef(WGS_COORDS)
-% by John Swoboda 1/8/2012
+% by John Swoboda 1/8/2013
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Description
 % This function takes a set of X,Y Z ECEF coordinates and puts them into

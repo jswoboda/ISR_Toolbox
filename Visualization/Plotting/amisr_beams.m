@@ -35,7 +35,7 @@ if nargin == 1
      % for madrigal data
     else any(strcmp('Data',str_data2));
         all_data = h5read(file_name,'/Data/Table Layout');
-        [~,ids,~] = unique(all_data.beamid);
+        [~,ids,~] = unique([all_data.azm,all_data.elm],'rows');
         az = all_data.azm(ids) ;
         el = all_data.elm(ids);
     end
