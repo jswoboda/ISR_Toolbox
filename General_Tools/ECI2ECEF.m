@@ -23,7 +23,8 @@ function ECEFCOORDS = ECI2ECEF(ECICOORDS,UT)
 %% Get the Sidreal Time
 % Get the Julian Date
 JD = unix2julian(UT);
-
+% arc secs2 degrees
+a2deg = 1/3600;
 % this was taken from the first reference to calculate the GMST.
 JD0 = NaN(size(JD));
 JDmin = floor(JD)-.5;
@@ -36,19 +37,22 @@ D0 = JD0 - 2451545.0;   %Compute the number of days since J2000
 T = D./36525;           %Compute the number of centuries since J2000
 %Calculate GMST in hours (0h to 24h) ... then convert to degrees
 GMST = mod(6.697374558 + 0.06570982441908.*D0  + 1.00273790935.*H + ...
-    0.000026.*(T.^2),24).*15;
+    0.000026.*(T.^2),24).*15;% works
 
-EPSILONm = 23.439291-0.0130111.*T - 1.64E-07.*(T.^2) + 5.04E-07.*(T.^3);
+EPSILONm = 23.439291-0.0130111.*T - 1.64E-07.*(T.^2) + 5.04E-07.*(T.^3);% works
 
 L = 280.4665 + 36000.7698.*T;
 dL = 218.3165 + 481267.8813.*T;
-OMEGA = 125.04452 - 1934.136261.*T;
+OMEGA = 125.04452 - 1934.136261.*T;%works
 
 deltpsi = -17.2*sind(OMEGA) - 1.32*sind(2*L) - 0.23*sind(2*dL) + 0.21*sind(2*OMEGA);
 
 delteps = 9.20*cosd(OMEGA) + 0.57*cosd(2*L)+ 0.1*cosd(2*dL) - 0.09*cosd(2*OMEGA);
+
+deltpsi = deltpsi*a2deg;
+delteps = delteps*a2deg;
 % This is in degrees
-GMAT = GMST + deltpsi.*cosd(EPSILONm.*delteps);
+GMAT = GMST + deltpsi.*cosd(EPSILONm+delteps);
 
 %% Apply Transform
 ECEFCOORDS = zeros(size(ECICOORDS));
