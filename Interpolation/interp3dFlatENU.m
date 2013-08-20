@@ -1,14 +1,15 @@
 function varargout = interp3dFlatENU(az,el,Range,time_points,posmesh,varargin)
 % interp3dFlatENU.m
-% [Ne_3d,Ti_3d...] = interp3dFlatLatLong(az,el,Range,time_points,posmesh,Ne,Ti...)
+% [Ne_3d,Ti_3d...] = interp3dFlatENU(az,el,Range,time_points,posmesh,Ne,Ti...)
 % This function will interpolate ISR data on to a local cartisian grid or
-% Enu with center reference point.
+% Enu with center reference point.  The interpolation is a natural neighbor
+% interpolation.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Inputs
 % az - An Nx1 array that contains the az positions of the data.
 % el - An Nx1 array that contains the el positions of the data.
 % Range - An Nx1 array that contains the range positions of the data.
-% time_points  An Nx1 array that contains the timestamps of the data
+% time_points - An Nx1 array that contains the timestamps of the data
 % relative to the other measurements. (note no interolation is done in the
 % time dimension this is purley needed to determine what time instance the
 % data should be in.
@@ -35,12 +36,6 @@ kx = sin(az2) .* cos(el2);
 ky = cos(az2) .* cos(el2);
 kz = sin(el2);
 
-% radar points in Cartesian coordinates
-% zr = Range1;
-% rr = zr./kz;
-% xr = rr.*kx;
-% yr = rr.*ky;
-
 
 xr = Range1.*kx;
 yr = Range1.*ky;
@@ -63,6 +58,8 @@ posmesh_red = posmesh(keep_overall,:);
 positions=double(positions);
 T = length(u_time);
 n_data = nargin-5;
+DT = DelaunayTri(xr(:),yr(:),zr(:));
+interpolation_method = 'natural';
 for iout = 1:n_data
     fprintf('Data set %d of %d\n',iout,n_data);
     F_in = varargin{iout};
@@ -77,7 +74,9 @@ for iout = 1:n_data
         % forever.
         orig_state = warning('query','all');
         warning('off','all');
-        Ni = griddatan(positions,values,posmesh_red,'linear'); 
+        %Ni = griddatan(positions,values,posmesh_red,'linear'); 
+        Ni_TSI = TriScatteredInterp(DT,values,interpolation_method);
+        Ni = Ni_TSI(posmesh_red);
         warning(orig_state);
     %     %Making all NaNs 0
 %         Ni(isnan(Ni))=0;

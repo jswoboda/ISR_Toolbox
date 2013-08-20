@@ -26,13 +26,24 @@ end
 N = length(file_list);
 Numlist = zeros(size(file_list));
 
-
+makewarn = false;
 for k = 1:N
     temp_str = file_list{k};
     split_cell = regexp(temp_str,'\.','split');
     
     time_split = regexp(split_cell{1},'\_','split');
-    time_str = [time_split{end-1},'-',time_split{end},'.',split_cell{2}];
+    if length(time_split{end-1})==6
+        yearstr = ['20',time_split{end-1}];
+        makewarn =true;
+    elseif length(time_split{end-1})==8
+        yearstr = time_split{end-1};
+    end
+        
+    time_str = [yearstr,'-',time_split{end},'.',split_cell{2}];
     
     Numlist(k) = datenum(time_str,'yyyymmdd-HHMMSS.FFF');
+end
+
+if makewarn
+    warning('Some of the strings year strings were only 2 digits');
 end

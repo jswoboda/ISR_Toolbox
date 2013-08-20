@@ -37,11 +37,10 @@ kx = sin(az2) .* cos(el2);
 ky = cos(az2) .* cos(el2);
 kz = sin(el2);
 
-% radar points in Cartesian coordinates
-zr = Range1;
-rr=zr./kz;
-xr = rr.*kx;
-yr = rr.*ky;
+xr = Range1.*kx;
+yr = Range1.*ky;
+zr = Range1.*kz;
+
 
 % translate to WGS
 ENU = [xr(:), yr(:), zr(:)]; % Original positions
