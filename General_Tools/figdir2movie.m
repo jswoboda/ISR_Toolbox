@@ -25,7 +25,7 @@ end
 open(writerObj);
 for k = 1:length(fig_info)
     
-    h = open(fig_info(k).name); 
+    h = open(fullfile(fig_dir,fig_info(k).name)); 
     frame = getframe(h);
     writeVideo(writerObj,frame);
     close(h)
