@@ -228,7 +228,23 @@ matlab_time = unixtime2matlab(double(u_time));
 %axes(handles.imageaxis)
 axes(handle2plot)
 imagesc(matlab_time,u_range,data_block,global_lims)
-datetick('x','HH:MM:SS');
+if max(matlab_time)-min(matlab_time)<1
+    N_tics = 5;
+    str_form = 'HH:MM';
+%     datetick('x','HH:MM','keeplimits','keepticks');
+else
+    N_tics = 4;
+    str_form = 'yyyymmdd HH:MM';
+%     datetick('x','yyyymmdd HH:MM','keepticks','keeplimits');
+end
+data_tics = matlab_time(round(linspace(1,length(matlab_time),N_tics)));
+date_str_mat = datestr(data_tics,str_form);
+date_cell = cell(1,N_tics);
+for k = 1:length(data_tics)
+    date_cell{k} = date_str_mat(k,:);
+end
+set(gca,'XTick',data_tics);
+set(gca,'XTickLabel',date_cell);
 set(gca,'Ydir','Normal');
 colorbar('peer',handle2plot);
 
