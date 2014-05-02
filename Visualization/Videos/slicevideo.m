@@ -79,7 +79,8 @@ for k = 1:Nt
         curdata = v{k};
     end
     % set up a slice array
-    slice(x,y,z,curdata,slicecell{1},slicecell{2},slicecell{3});
+    htemp = slice(x,y,z,curdata,slicecell{1},slicecell{2},slicecell{3});
+    set(htemp,'EdgeColor','none', 'FaceColor','interp');
     xlabel(axlabels{1},'FontSize',16);
     ylabel(axlabels{2},'FontSize',16);
     zlabel(axlabels{3},'FontSize',16);

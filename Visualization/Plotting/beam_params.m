@@ -196,8 +196,8 @@ data_value = get(handles.datachoicepopup,'value');
 beam_value = get(handles.beamchoicepopup,'value');
 beam_names = get(handles.beamchoicepopup,'string');
 if iscell(beam_names)
-    beam_choice_nm = beam_names{data_value};
-elseif isstr(beam_names)
+    beam_choice_nm = beam_names{beam_value};
+elseif ischar(beam_names)
     beam_choice_nm = beam_names;
 end
 

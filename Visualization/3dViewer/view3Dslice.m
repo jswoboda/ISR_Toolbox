@@ -240,6 +240,13 @@ title(handles.axes_alphamap,sprintf('Alpha Map (%2.2e : %2.2e)',hX(handles.amin)
 %% -- update3Dview
 function update3Dview(handles,h_axes,x_vec,y_vec,z_vec)
 
+useglobalmm = get(handles.check_globalmaxmin,'Value');
+augmat = handles.matrix(:);
+augmat = augmat(augmat~=-Inf);
+
+min_all = min(augmat);
+max_all = max(augmat);
+global_lims = [min_all,max_all];
 
 [Xi,Yi,Zi] = meshgrid(handles.xsca,handles.ysca,handles.zsca);
 new_x = handles.xsca(x_vec);
@@ -247,6 +254,10 @@ new_y = handles.ysca(y_vec);
 new_z = handles.zsca(z_vec);
 
 slice_hand = slice(h_axes,Xi,Yi,Zi,handles.matrix,new_x,new_y,new_z);
+caxis(global_lims)
+if useglobalmm
+    caxis([handles.cmin,handles.cmax]);
+end
 colormap jet;
 xlabel(h_axes,handles.xname);
 ylabel(h_axes,handles.yname);
@@ -257,8 +268,11 @@ colorbar('peer',h_axes);
 %% -- update2Dview
 function update2Dview(handles)
 useglobalmm = get(handles.check_globalmaxmin,'Value');
-min_all = min(handles.matrix(:));
-max_all = max(handles.matrix(:));
+augmat = handles.matrix(:);
+augmat = augmat(augmat~=-Inf);
+
+min_all = min(augmat);
+max_all = max(augmat);
 global_lims = [min_all,max_all];
 
 % plot xy
