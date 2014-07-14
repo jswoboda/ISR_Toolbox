@@ -5,13 +5,20 @@ function figdir2movie(fig_dir,outname,varargin)
 % movie.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Inputs
-% fig_dir - A string that is the location of the directory
+% fig_dir - A string that is the location of the directory or a string that
+% the dir command can find fig files.
 % outname - The name of the video
 % s - A struct that is set up with the same variable names as the
 % videoWriter class
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-fig_info = dir(fullfile(fig_dir,'*.fig'));
+if strcmp(fig_dir(end-3:end),'.fig')
+    fig_info = dir(fig_dir);
+    fig_str = fig_dir;
+    [fig_dir,~,~] = fileparts(fig_dir);
+else
+    fig_info = dir(fullfile(fig_dir,'*.fig'));
+end
 writerObj = VideoWriter(outname);
 % populate the writerObj object
 if nargin >2
