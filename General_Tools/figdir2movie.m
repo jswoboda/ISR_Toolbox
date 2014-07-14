@@ -30,9 +30,14 @@ if nargin >2
 end
 % start saving things
 open(writerObj);
+% Make all the positions the same
+h = open(fullfile(fig_dir,fig_info(1).name));
+posvec = get(h,'Position');
+close(h)
 for k = 1:length(fig_info)
     
     h = open(fullfile(fig_dir,fig_info(k).name)); 
+    set(h,'Position',posvec);
     frame = getframe(h);
     writeVideo(writerObj,frame);
     close(h)
