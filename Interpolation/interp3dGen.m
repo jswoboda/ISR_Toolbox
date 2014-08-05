@@ -27,18 +27,18 @@ function [F_out,Xi,Yi,Zi] = interp3dGen(F_in,az,el,Altitude,NUMPOINTS,DELTALT)
 % Zi: This is a [AxBxC] dimensional array that changes along the z
 % direction.
 %% Get basic info
-[N,M,T] = size(F_in);
+[N,T] = size(F_in);
 
 %% convert to Cartesian coordinates (flat Earth model)
 
 % Expand el & az by repeating their values (i.e. el1 is the same size as Ne(:,:,t))
-el1 = repmat(el,N,1); 
-az1 = repmat(az,N,1); 
+% el1 = repmat(el,N,1); 
+% az1 = repmat(az,N,1); 
 
 % Grab just the points within the desired altitude
 alt_idx = 1:N;
-el2 = el1(:);
-az2 = az1(:);
+el2 = el;
+az2 = az;
 
 % Direction cosines, from spherical to Cartesian coordinates
 kx = sin(az2) .* cos(el2);
@@ -70,13 +70,12 @@ F_out = zeros( [size(Xi), T] );
 
 %Loop through times of interest to interpolate the electron densities onto
 %the new grid
-T = size(F_in,3);
 
 for t = 1:T
     fprintf('Interpolating time step %d (of %d)... ',t,T);
    
     % Grab the current densities.
-    F1 = double(F_in(:,:,t));
+    F1 = double(F_in(:,t));
 
     % Grab just the values we're interested in...
     values = F1(:);
@@ -85,10 +84,10 @@ for t = 1:T
 
     % ... and interpolate onto the new grid.
 
-    Ni = griddatan(positions,values,posmesh,'linear'); 
-        
+    Ninterp = scatteredInterpolant(xr(:), yr(:), zr(:),values,'natural','none');
+    Ni = Ninterp(Xi(:), Yi(:), Zi(:));
  %     %Making all NaNs 0
-    Ni(isnan(Ni))=0;
+    %Ni(isnan(Ni))=0;
 
 
     % Reshape Ni to go with Xi, Yi, & Zi.
@@ -97,6 +96,6 @@ for t = 1:T
     % "Deposit" Ni into Ne.
 
     F_out(:,:,:,t) = Nireshaped; % 
-    fprintf('linear interpolation done\n ')  
+    fprintf('Time %d of %d done\n',t,T)  
  
 end

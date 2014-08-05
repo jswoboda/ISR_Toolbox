@@ -53,7 +53,7 @@ else
     for iparam = 1:numparams
         
         for itime = 1:size(S_in.Param_List,2)
-            F = scatteredInterpolant(Cart_Coords(:,1),Cart_Coords(:,2),Cart_Coords(:,3),S_in.Param_List(:,itime),...
+            F = scatteredInterpolant(Cart_Coords(:,1),Cart_Coords(:,2),Cart_Coords(:,3),S_in.Param_List(:,itime,iparam),...
                 'natural','none');
            S_out.Param_List(:,itime,iparam) =F(X(:),Y(:),Z(:));
            fprintf(['\tTime ',num2str(itime), ' of ',num2str(size(S_in.Param_List,2)),'\n'])
