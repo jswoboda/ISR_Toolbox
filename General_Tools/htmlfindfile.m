@@ -13,7 +13,7 @@ function file_list = htmlfindfile(url,file2find)
 % look at.
 % file2find - A string that will be used as a part in the regular
 % expression to find the desired file(s).  Use '*\.FITS' for example to find
-% jpeg files.
+% FITS files.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Outputs 
 % file_list - A Nx1 cell array of strings with the file names.

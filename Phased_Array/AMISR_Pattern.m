@@ -40,16 +40,6 @@ ntot = n*4;% number of elements times panels in y direction
 phix = k0*dx*(sin(EL).*cos(AZ)-sin(El0).*cos(Az0));
 % relative phase between the y elements
 phiy = k0*dy.*(sin(EL).*sin(AZ)-sin(El0).*sin(Az0));
-%AF = 0;% array factor
-% for mm =-mtot/2:2:mtot/2-1
-%     for nn = -ntot/2:ntot/2-1
-%         % for columns not shifted
-%         ea1 = exp(1i*mm*phix+1i*nn*phiy);
-%         % for columns that are shifted
-%         ea2 = exp(1i*(mm+1)*phix+1i*(nn+1/2)*phiy);
-%         AF = ea1+ea2+AF;
-%     end
-% end
 
 AF = (1/2)*(1+exp(1i*((1/2)*phiy+phix))).*diric(2*phix,mtot/2).*diric(phiy,ntot);
 arrayfac = abs(AF).^2;
