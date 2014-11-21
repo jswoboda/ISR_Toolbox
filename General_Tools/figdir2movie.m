@@ -32,12 +32,15 @@ end
 open(writerObj);
 % Make all the positions the same
 h = open(fullfile(fig_dir,fig_info(1).name));
-posvec = get(h,'Position');
+pause(1)
+%posvec = get(h,'Position');
+posvec = h.Position;
 close(h)
 for k = 1:length(fig_info)
     
     h = open(fullfile(fig_dir,fig_info(k).name)); 
     set(h,'Position',posvec);
+    pause(1)
     frame = getframe(h);
     writeVideo(writerObj,frame);
     close(h)
