@@ -1,5 +1,3 @@
-#!/usr/bin/env octave
-
 addpath(genpath('..'));
 
 url = 'http://amisr.asf.alaska.edu/PKR/DASC/RAW/2013/20130414/';
