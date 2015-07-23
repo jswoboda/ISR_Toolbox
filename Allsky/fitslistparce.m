@@ -4,21 +4,23 @@ function red_file_list = fitslistparce(file_list,timeextremes,varargin)
 % by John Swoboda
 % This function will parce through a cellarray of strings that conatin
 % names of FITS files that are time stamped according to University of
-% Alaska's naming convention and will find all of the files that are in a
+% Alaska's naming convention  and will find all of the files that are in a
 % desired time period and if specified, the wavelength
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Inputs
+%% Inputs
 % file_list - A Nx1 or 1xN cell array with the file names.
 % timeextreams - A 1x2 cell array containing the times in datestr format or 
 % a 1x2 numerical array holding datenum format numbers for the extremes of
 % the window one wants to look at.
 % wl - A scalar that is the wavelength in nm. (optional)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Outputs
+%% Outputs
 % red_file_list - A reduced version of file_list with only the desired
 % files.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%%
+p = inputParser;
+addOptional(p,'wl',[])
+parse(p,varargin{:})
+U = p.Results;
+%%
 if iscell(timeextremes)
     lowerextstr = timeextremes{1};
     upperextstr = timeextremes{2};
@@ -35,8 +37,7 @@ end
 
 
 % for wavelength
-if nargin>2
-    
+if isfinite(U.wl)
     str_2find =sprintf('%0.4d',varargin{1});
     keep_wl = false(size(file_list));
     
@@ -49,7 +50,5 @@ else
 end
 
 Numlist = fitsfiletimestamp(file_list);
-keep_nums = (Numlist>=lowe&Numlist<=uppe)&keep_wl;
+keep_nums = (Numlist>=lowe & Numlist<=uppe) & keep_wl;
 red_file_list = file_list(keep_nums);
-
-
