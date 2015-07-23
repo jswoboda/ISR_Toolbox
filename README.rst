@@ -2,7 +2,7 @@
 ISR_Toolbox
 ===========
 
-This is a set of MATLAB	tools to analyze ISR data from Madrigal and other sources.
+This is a set of MATLAB / Octave 4.0 tools to analyze ISR data from Madrigal and other sources.
 
 Install
 =======
@@ -29,4 +29,4 @@ tools to read Poker Flat Research Range DASC FITS data.
  Example for 2013 APR 14 from Matlab (note the date range is enclosed in braces, not brackets)::
 
   dlFITS('http://amisr.asf.alaska.edu/PKR/DASC/RAW/2013/20130414/',...
-         '~/data/',{'04/14/2013 08:00:00','04/14/2013 09:00:00'})
+         '~/data/',{'14-Apr-2013 08:00:00','14-Apr-2013 08:10:00'})
