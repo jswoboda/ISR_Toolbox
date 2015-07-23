@@ -23,6 +23,7 @@ U = p.Results;
 if ~exist(final_dir,'dir')
     error(['Your output directory ',final_dir,' does not exist'])
 end
+disp(['outputting files to ',final_dir])
 %%
 allfiles = htmlfindfile(myurl,'*\.FITS');
 
