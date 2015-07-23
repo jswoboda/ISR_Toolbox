@@ -63,3 +63,4 @@ z_eci = ECICOORDS(3,:);
 ECEFCOORDS(1,:) = cosd(GMAT).*x_eci + sind(GMAT).*y_eci;
 ECEFCOORDS(2,:) = -sind(GMAT).*x_eci + cosd(GMAT).*y_eci;
 ECEFCOORDS(3,:) = z_eci;
+end

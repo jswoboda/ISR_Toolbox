@@ -45,11 +45,11 @@ else
     el_i = el;
 end
 % check to make sure az and el
-if ~all(size(el_i)==size(d))||~all(size(az_i)==size(d))
+if ~all(size(el_i)==size(d)) || ~all(size(az_i)==size(d))
     error('El and Az need to be same size as data');
 end
 % Check the desired size input
-if length(im_sz) ==1
+if length(im_sz) == 1
     im_sz = [im_sz,im_sz];
 end
 %% Fix problems with the az matrix
@@ -57,9 +57,8 @@ end
 % will put the data in the wrong spot.
 grad_thresh = 15;
 [Fx,Fy] = gradient(az_i);
-bad_data_logic = sqrt(Fx.^2+Fy.^2)>grad_thresh;
+bad_data_logic = hypot(Fx, Fy) > grad_thresh;
 az_i(bad_data_logic) = 0;
-
 
 % flip image and el/az maps to satellite projection. This is left over code
 % from google earth mappings
@@ -81,8 +80,7 @@ yl = y_data(:);
 zl = z_data(:);
 
 % trim nans from the data locations
-
-good_data = ~(isnan(xl)|isnan(yl)|isinf(xl)|isinf(yl));
+good_data = isfinite(xl) & isfinite(yl);
 xl = xl(good_data);
 yl = yl(good_data);
 zl = zl(good_data);
@@ -95,7 +93,6 @@ ECEF_COORDS = enu2ecef(ENU,lla);
 positions_latfirst = ecef2wgs(ECEF_COORDS)';
 positions = [positions_latfirst(:,2),positions_latfirst(:,1)];
 %% Interpolate data
-
 % create the vectors that the data will be interpolated over.
 xv = linspace(min(positions_latfirst(:,2)),max(positions_latfirst(:,2)),im_sz(2));
 yv = linspace(min(positions_latfirst(:,1)),max(positions_latfirst(:,1)),im_sz(1));

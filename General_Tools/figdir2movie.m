@@ -3,14 +3,13 @@ function figdir2movie(fig_dir,outname,varargin)
 % figdir2movie(fig_dir,outname,s)
 % This will take a directory with a set of figures and make them into a
 % movie.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Inputs
+%% Inputs
 % fig_dir - A string that is the location of the directory or a string that
 % the dir command can find fig files.
 % outname - The name of the video
 % s - A struct that is set up with the same variable names as the
 % videoWriter class
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
 
 if strcmp(fig_dir(end-3:end),'.fig')
     fig_info = dir(fig_dir);

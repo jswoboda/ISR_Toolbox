@@ -6,14 +6,11 @@ function Numlist = fitsfiletimestamp(file_list)
 % as file_list) in the MATLAB datenum format for a cell array of FITS files
 % from the Poker Flat allsky camera.  It is assumed that file_list is a
 % cell array of strings.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Inputs
+%% Inputs
 % file_list - A Nx1 or 1xN cell array with the file names.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Outputs
+%% Outputs
 % Numlist - A Nx1 or 1xN array of datenum time stamps.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%%
 if ischar(file_list)
     temp_list = file_list;
     N  = size(temp_list,1);
