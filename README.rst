@@ -30,3 +30,21 @@ tools to read Poker Flat Research Range DASC FITS data.
 
   dlFITS('http://amisr.asf.alaska.edu/PKR/DASC/RAW/2013/20130414/',...
          '~/data/',{'14-Apr-2013 08:00:00','14-Apr-2013 08:10:00'})
+         
+An example script for this is at::
+
+  ISR_Toolbox/Example_Scripts/loadDASC2013Apr14.m
+  
+and if you're using Python, you can run the Python-wrapped Matlab code example (requires Octave 4.0+ and Oct2Py)::
+  
+  ISR_Toolbox/Example_Scripts/loadDASC2013Apr14.py
+
+Notes
+=====
+As usual when using Octave be sure to use the ``--braindead`` option to enable several Matlab-like options that is in your Command Prompt or Terminal::
+  
+  octave --braindead
+  
+The ``Allsky`` directory is the only one tested with Octave, and it requires Octave 4.0+ on Windows,Mac,Linux. 
+
+
