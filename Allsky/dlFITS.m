@@ -17,7 +17,7 @@ function dlFITS(myurl,final_dir,times,varargin)
 %%
 p = inputParser;
 addOptional(p,'wl',[])
-parse(p,varargin{:})
+p.parse(varargin{:})
 U = p.Results;
 
 if ~exist(final_dir,'dir')
@@ -32,12 +32,12 @@ red_file_list = fitslistparce(allfiles,times,U.wl);
 nfile = length(red_file_list);
 if nfile > 100
     warning(['Attempting to download ',int2str(nfile),' files, this may take a long time and use a lot of Hard drive space.'])
-end    
-    
+end
+
 for k = 1:nfile
     temp_filename = [myurl,red_file_list{k}];
     temp_fileput = fullfile(final_dir,red_file_list{k});
-    
+
     updatestr = [red_file_list{k},' ', int2str(k),' / ',int2str(nfile)];
     if exist(temp_fileput,'file')
         disp(['skipping already existing ',updatestr])
@@ -45,7 +45,7 @@ for k = 1:nfile
     else
         disp(['downloading ',updatestr])
     end
-    
+
     try
         websave(temp_fileput,temp_filename);
     catch

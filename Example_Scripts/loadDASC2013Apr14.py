@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 from oct2py import Oct2Py
+from os.path import expanduser
 
 def downloadDASC(dayurl,outdir,timefirstlast):
     oc = Oct2Py(timeout=300)
     oc.addpath(oc.genpath('..'))
-    oc.dlFITS(dayurl,outdir,timefirstlast)
+    oc.dlFITS(dayurl,expanduser(outdir),timefirstlast)
 
 
 if __name__ == '__main__':
