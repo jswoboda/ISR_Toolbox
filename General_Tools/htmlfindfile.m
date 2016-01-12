@@ -23,7 +23,7 @@ function file_list = htmlfindfile(url,file2find)
 
 my_tok = ['<a href="([^"]',file2find,')">'];
 try
-    html = webread(url);
+    html = webread(url,'Timeout',15);
 catch
     html = urlread(url);
 end

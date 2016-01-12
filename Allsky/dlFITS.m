@@ -47,10 +47,12 @@ for k = 1:nfile
     end
 
     try
-        websave(temp_fileput,temp_filename);
+        websave(temp_fileput,temp_filename,'Timeout',30);
     catch
         urlwrite(temp_filename,temp_fileput);
     end
+    
+    pause(0.5+0.5*rand(1)) %random delay of 0.5-1.0 second to avoid getting banned
 end %for
 
 end %function
