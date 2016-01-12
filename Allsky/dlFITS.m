@@ -23,13 +23,13 @@ U = p.Results;
 if ~exist(final_dir,'dir')
     error(['Your output directory ',final_dir,' does not exist'])
 end
-disp(['outputting files to ',final_dir])
+
 %%
 allfiles = htmlfindfile(myurl,'*\.FITS');
-
 red_file_list = fitslistparce(allfiles,times,U.wl);
 
 nfile = length(red_file_list);
+disp(['outputting ',int2str(nfile),' files to ',final_dir])
 if nfile > 100
     warning(['Attempting to download ',int2str(nfile),' files, this may take a long time and use a lot of Hard drive space.'])
 end

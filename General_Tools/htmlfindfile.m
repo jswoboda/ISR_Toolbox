@@ -22,7 +22,11 @@ function file_list = htmlfindfile(url,file2find)
 % http://stackoverflow.com/questions/11126721/using-matlab-to-parse-html-for-url-in-anchors-help-fast
 
 my_tok = ['<a href="([^"]',file2find,')">'];
-html = urlread(url);
+try
+    html = webread(url);
+catch
+    html = urlread(url);
+end
 
 file_list = regexp(html,my_tok, 'tokens');
 file_list = [file_list{:}]';
