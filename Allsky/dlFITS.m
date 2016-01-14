@@ -1,20 +1,20 @@
-function dlFITS(myurl,final_dir,times,varargin)
+function dlFITS(final_dir,times,varargin)
 % dlFITS
 % by John Swoboda
-% This function will find the data within a certain time period and down it
+% This function will find the DASC data within a certain time period and down it
 % to specific directory.
 %% Inputs
-% myurl - The url that all the files are located.
 % final_dir - The directory that the data will be downloaded to.
 % times - A cell array of date strings that will hold the time limits
 % wl - The desired wavelength of the optical data.
 %% Example
-% myurl = 'http://amisr.asf.alaska.edu/PKR/DASC/RAW/2012/20121124/';
 % final_dir =  '/Volumes/Research/eng_research_irs/PINOT/Data_Fusion/FusedData/';
 % times = {'11/24/2012 6:00:00','11/24/2012 6:15:00'};
 % wl = 558;
-% dlFITS(myurl,final_dir,times,wl)
+% dlFITS(final_dir,times,wl)
 %%
+urlstem = 'https://amisr.asf.alaska.edu/PKR/DASC/RAW/';
+
 p = inputParser;
 addOptional(p,'wl',[])
 p.parse(varargin{:})
@@ -25,17 +25,19 @@ if ~exist(final_dir,'dir')
 end
 
 %%
-allfiles = htmlfindfile(myurl,'*\.FITS');
+s = datevec(times{1});
+urlstem = [urlstem,int2str(s(1)),'/',int2str(s(1)),num2str(s(2),'%02d'),num2str(s(3),'%02d'),'/'];
+allfiles = htmlfindfile(urlstem,'*\.FITS');
 red_file_list = fitslistparce(allfiles,times,U.wl);
 
 nfile = length(red_file_list);
 disp(['outputting ',int2str(nfile),' files to ',final_dir])
-if nfile > 100
+if nfile > 1000
     warning(['Attempting to download ',int2str(nfile),' files, this may take a long time and use a lot of Hard drive space.'])
 end
 
 for k = 1:nfile
-    temp_filename = [myurl,red_file_list{k}];
+    temp_filename = [urlstem,red_file_list{k}];
     temp_fileput = fullfile(final_dir,red_file_list{k});
 
     updatestr = [red_file_list{k},' ', int2str(k),' / ',int2str(nfile)];
