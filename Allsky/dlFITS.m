@@ -37,7 +37,7 @@ if nfile > 1000
 end
 
 for k = 1:nfile
-    temp_filename = [urlstem,red_file_list{k}];
+    temp_url = [urlstem,red_file_list{k}];
     temp_fileput = fullfile(final_dir,red_file_list{k});
 
     updatestr = [red_file_list{k},' ', int2str(k),' / ',int2str(nfile)];
@@ -49,11 +49,14 @@ for k = 1:nfile
     end
 
     try
-        websave(temp_fileput,temp_filename,'Timeout',30);
+        try
+            websave(temp_fileput,temp_url,'Timeout',30);
+        catch
+            urlwrite(temp_url,temp_fileput);
+        end
     catch
-        urlwrite(temp_filename,temp_fileput);
+        disp(['problem downloading ',temp_url])
     end
-    
     pause(0.5+0.5*rand(1)) %random delay of 0.5-1.0 second to avoid getting banned
 end %for
 
