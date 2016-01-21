@@ -35,9 +35,6 @@ An example script for this is at::
 
   ISR_Toolbox/Example_Scripts/loadDASC2013Apr14.m
   
-and if you're using Python, you can run the Python-wrapped Matlab code example (requires Octave 4.0+ and Oct2Py)::
-  
-  ISR_Toolbox/Example_Scripts/loadDASC2013Apr14.py
 
 Notes
 =====
