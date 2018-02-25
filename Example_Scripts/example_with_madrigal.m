@@ -17,7 +17,7 @@ end_time = datenum(end_time_vec);
 
 %% Get Instrument and experiment info
 
-madurl = 'http://isr.sri.com/madrigal';
+madurl = 'https://isr.sri.com/madrigal';
 cgiurl = getMadrigalCgiUrl(madurl);
 
 'List all instruments, and their latitudes and longitudes:';

@@ -1,15 +1,14 @@
 %% example_plotting
 % This script calls an interpolation program and the view3Dgui to look at
 % at electron density examples.
+
 %% Declare Data
-% This is the directory that has the data on the server. On my specific set
-% up.  You may have to change this!
-data_dir = '/Users/Bodangles/Documents/ISRData/20121124_day';
+data_dir = '~/data/2012-11-24';
 file_name = 'pfa121124.002.hdf5';
 radar_file = fullfile(data_dir,file_name);
-
+%% 
 if ~exist(radar_file,'file')
-    error('This file does not exist please change the path or the file name variables');
+    error([radar_file,' does not exist.']);
 end
 
 %% Pull in and trim data
